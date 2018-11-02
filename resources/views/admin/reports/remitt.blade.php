@@ -10,7 +10,7 @@
 
     <div id="content-header">
       <div id="breadcrumb"> <a href="{{ url('/admin/dashboard') }}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href=""  class="current">Reports</a> </div>
-      <h1><i class="icon-edit"></i> Reports (Remitted Collection)</h1>
+      <h1><i class="icon-edit"></i> Reports for Extra</h1>
 
       <div class="container-fluid">
 
@@ -35,39 +35,94 @@
             <hr>
         <div class="row-fluid">
                 <div class="span12">
-                    <div class="span8">
+
                         {{--  <div class="container-fluid">  --}}
 
-                                    <div class="widget-box">
-                                      <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-                                        <h5>List of Extra</h5>
-                                      </div>
-                                      <div class="widget-content nopadding">
-                                            <table class="table table-bordered data-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Customers Name</th>
-                                                    <th>Company Name/Address</th>
-                                                    <th>Contact No.</th>
-                                                    <th>Customer Address</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                            <div class="widget-box">
+                                <div class="widget-title"> <span class="icon"> <i class="icon-bookmark"></i> </span>
+                                  <h5>Choose Date From and Date To</h5>
+                                  <a href="" target="_blank" style="margin-top: 3px; margin-right: 7px; margin-bottom: 4px" class="btn btn-success pull-right"><i class="icon-print"></i> Print</a>
 
-                                             {{--  @foreach($customer as $cus)
-                                                <tr class="gradeX">
-                                                <td>{{ $cus->customer_name }} {{ $cus->customer_lastname }}</td>
-                                                <td>{{ $cus->customer_companyaAdress }}</td>
-                                                <td>{{ $cus->customer_contactno }}</td>
-                                                <td>{{ $cus->customer_address }}</td>
-                                                </tr>
-                                            @endforeach  --}}
+                                </div>
 
 
-                                            </tbody>
-                                            </table>
-                                      </div>
-                                    </div>
+                                    <div class="widget-content nopadding">
+                                            <form class="form-horizontal" method="post" action="" name="dateRange" id="dateRange" novalidate="novalidate">{{ csrf_field() }}
+
+                                                <input type="hidden" class="span11" name="indicator_id" id="indicator_id" value="">
+                                                <div class="span4" style="margin-left: -2em">
+                                                        <label class="control-label">Date From:</label>
+                                                        <div class="controls">
+                                                            <input type="text" id="datefrom" name="datefrom" data-date-format="yyyy/m/d" class="datepicker " required>
+                                                            {{-- <span class="help-block">Date with Formate of  (dd-mm-yy)</span> --}}
+                                                        </div>
+                                                </div>
+
+                                                <div class="span4">
+
+                                                        <label class="control-label">Date To:</label>
+                                                        <div class="controls">
+                                                            <input type="text" id="dateto" name="dateto" data-date-format="yyyy/m/d"   class="datepicker " required>
+                                                            {{-- <span class="help-block">Date with Formate of  (dd-mm-yy)</span> --}}
+                                                        </div>
+                                                </div>
+
+                                                <div class="span4" style="margin-left: -4em">
+                                                        <div class="controls">
+                                                            <input type="submit" value="Fetch Record" class="btn btn-primary pull-right span12">
+                                                        </div>
+                                                </div>
+
+                                            </form>
+
+                        </div>
+
+                        <div class="widget-box">
+                                <div class="widget-title"> <span class="icon"> <i class="icon-bookmark"></i> </span>
+                                  <h5>Extras Information</h5>
+                                </div>
+                                <div class="widget-content nopadding">
+                                  <table class="table table-bordered table-striped">
+                                    <thead>
+                                      <tr>
+                                        <th>Date</th>
+                                        <th>Room No.</th>
+                                        <th>Name</th>
+                                        <th>Qty</th>
+                                        <th>Total Amount</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+
+                                            <tr class="odd gradeX">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="center"> </td>
+                                                <td class="center">
+
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td colspan="7" style="text-align: right"><b style="font-size: 1.4em;">Total Sales (PHP)</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <b style="color: red; font-size: 1.4em">
+
+
+                                                    </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </td>
+
+
+
+
+
+                                            </tr>
+
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+
 
 
                               {{--  </div>  --}}

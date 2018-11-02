@@ -9,7 +9,7 @@
 <div id="content">
 
     <div id="content-header">
-      <div id="breadcrumb"> <a href="{{url('/admin/dashboard')}}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="" class="current">Reserve</a> </div>
+      <div id="breadcrumb"> <a href="{{ url('/admin/dashboard') }}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="" class="current">Reserve</a> </div>
       <h1><img src="{{ asset('images/checkin.png') }}"  />Reserve Room no. {{ $manages->room_no }} ({{ $manages->room_type }})</h1>
 
       <div class="container-fluid">
@@ -18,19 +18,22 @@
                             <input type="submit" id="cancel_it" value="Cancel the Reservation" class="btn btn-danger pull-right">
                     </form>
 
+                    <a href="{{ url('/printReserve/'.str_pad($manages->rsvn_no, 10, '0', STR_PAD_LEFT)) }}" target="_blank" class="btn btn-success pull-right"><i class="icon-print"></i> Print</a></td>
 
-        @if(Session::has('flash_message_error'))
-            <div class="alert alert-error alert-block">
-                <button type="button" class="close" data-dismiss="alert">x</button>
-                <strong>{!! session('flash_message_error')!!}</strong>
-            </div>
-        @endif
-        @if(Session::has('flash_message_success'))
-            <div class="alert alert-success alert-block">
-                <button type="button" class="close" data-dismiss="alert">x</button>
-                <strong>{!! session('flash_message_success')!!}</strong>
-            </div>
-        @endif
+        <div class="span7">
+            @if(Session::has('flash_message_error'))
+                <div class="alert alert-error alert-block">
+                    <button type="button" class="close" data-dismiss="alert">&times;/button>
+                    <strong>{!! session('flash_message_error')!!}</strong>
+                </div>
+            @endif
+            @if(Session::has('flash_message_success'))
+                <div class="alert alert-success alert-block">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>{!! session('flash_message_success')!!}</strong>
+                </div>
+            @endif
+        </div>
 
       </div>
 
@@ -253,6 +256,7 @@
 </div>
 
 @endsection
+
 @section ('scripts')
 <script>
 
@@ -351,8 +355,8 @@
                 if (result.value) {
                     $('#cancelroom').submit();
                     swal(
-                        'Deleted!',
-                        'Your file has been deleted.',
+                        'Canceled!',
+                        'Reservation is now Canceled.',
                         'success'
                       )
 

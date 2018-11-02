@@ -43,8 +43,8 @@
                                         <table class="table table-bordered data-table">
                                         <thead>
                                             <tr>
-                                            <th>Front Desk Name</th>
-                                            <th>Action</th>
+                                                <th>Front Desk Name</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -55,14 +55,13 @@
 
                                                     <td class="center">
                                                         <center>
-                                                        <a href="{{ url('/settings/edit_fd/'.$fd->frontdesk_id) }}" class="btn btn-primary btn-mini">Edit</a>
+                                                        <a href="{{ url('/settings/update_fd/'.$fd->frontdesk_id) }}" class="btn btn-primary btn-mini">Edit</a>
                                                         {{--  <a href="{{ $manage->id }}" class="btn btn-primary btn-mini">Edit</a>  --}}
-                                                        <a id="delCat" href="{{ url('/settings/fd/'.$fd->frontdesk_id) }}" class="btn btn-danger btn-mini">Delete</a>
+                                                        <a href="{{ url('/settings/delete-frontdesk/'.$fd->frontdesk_id) }}" class="btn btn-danger btn-mini deleteRecord">Delete</a>
                                                         </center>
                                                     </td>
                                                 </tr>
 
-                                                {{--    --}}
 
                                             @endforeach
 
@@ -82,7 +81,7 @@
                                 </div>
 
                                 <div class="widget-content nopadding">
-                                    <form class="form-horizontal" method="post" action="{{ url('/settings/add-fd') }}" name="add_room" id="add_room" novalidate="novalidate">{{ csrf_field() }}
+                                    <form class="form-horizontal" method="post" action="{{ url('/settings/add-fd') }}" name="fdesk" id="fdesk" novalidate="novalidate">{{ csrf_field() }}
 
                                         <div class="control-group">
                                             <label class="control-label">Front Desk Name</label>
@@ -110,4 +109,15 @@
 </div>
 
 
+@endsection
+
+@section('name')
+<script>
+        $('.deleteRecord').click(function(){
+            if (confirm('Are you sure you want to delete this Category?')) {
+                return true;
+            }
+            return false;
+        });
+</script>
 @endsection

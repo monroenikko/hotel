@@ -10,7 +10,7 @@
 
     <div id="content-header">
       <div id="breadcrumb"> <a href="{{ url('/admin/dashboard') }}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href=""  class="current">Guest List</a> </div>
-      <h1><i class="icon-edit"></i> Guest List</h1>
+      <h1><i class="icon-edit"></i> Hotel Archive Guest List</h1>
 
       <div class="container-fluid">
 

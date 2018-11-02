@@ -1,4 +1,9 @@
 @extends('layouts.adminLayout.admin_design')
+
+@section ('content_title')
+    Room Type
+@endsection
+
 @section('content')
 
 <div id="content">
@@ -53,20 +58,7 @@
                                         </div>
                                       </div>
 
-                                      <div class="control-group">
-                                            <label class="control-label">Adult(s)</label>
-                                            <div class="controls">
-                                                <input class="span5 input-sm" type="text" placeholder="0" name="adults_capacity" id="adults_capacity" value="{{ $types->totalAdults }}">
 
-                                            </div>
-                                        </div>
-
-                                        <div class="control-group">
-                                            <label class="control-label">Child(ren)</label>
-                                            <div class="controls">
-                                                <input class="span5 input-sm"  type="text" placeholder="0" name="child_capacity" id="child_capacity" value="{{ $types->totalChildren }}">
-                                            </div>
-                                        </div>
 
 
                                       <div class="form-actions" style="text-align:right">

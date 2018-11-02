@@ -17,9 +17,16 @@
 
         <div class="container-fluid">
             <hr>
-            <h3>RSVN No: <span style="color:orangered">{{ $manages->rsvn_no }}</span></h3>
-            <h3>Departure Date: <span style="color:orangered">{{ $booking->checkouDate }}</span></h3>
 
+
+            <div class="row-fluid">
+                    <div class="span6">
+                        <h3>Departure Date: <span style="color:orangered">{{ $booking->checkouDate }} </span></h3>
+                    </div>
+                    <div class="span6">
+                            <h3>RSVN No: <span style="color:orangered">{{ str_pad($booking->booking_rsvn_no, 10, '0', STR_PAD_LEFT) }}</span></h3>
+                    </div>
+                </div>
 
             {{-- <input type="button" value="Proceed to Check-out" id="checkout" class="btn btn-success pull-right"> --}}
 
@@ -110,16 +117,16 @@
                                     <th class="head0 right">Total Bill</th>
                                     <th class="head0 right">DP</th>
                                     <th class="head0 right">Room No.</th>
-                                    <th>Remark</th>
+                                    <th>Remarks</th>
                                 </tr>
                             </thead>
                             <tbody>
                                     <tr>
-                                            <td> {{ $manages->room_no }}</td>
+                                            <td> 1</td>
                                             <td> {{ $booking->bookingroomcategory}}</td>
                                             <td> </td>
                                             <td> PHP <?php
-                                                $manages->room_rate;
+
                                                 $formattedNum = number_format($manages->room_rate, 2);
                                                 echo $formattedNum;
                                                 ?>
@@ -127,14 +134,14 @@
                                             <td> {{ $booking->bookingroomcategory}}</td>
                                             <td> PHP
                                                     <?php
-                                                    $booking->bookingTotalCost;
+
                                                     $formattedNum = number_format($booking->bookingTotalCost, 2);
                                                     echo $formattedNum;
                                                     ?>
                                             </td>
                                             <td> PHP
                                                     <?php
-                                                    $booking->booking_downpayment;
+
                                                     $formattedNum = number_format($booking->booking_downpayment, 2);
                                                     echo $formattedNum;
                                                     ?>
@@ -148,19 +155,44 @@
                             <br/>
                             <br/>
 
-                            <table class="table table-bordered table-invoice-full">
+                            <table id="res" class="table table-bordered table-invoice-full">
                                     <thead>
                                         <tr>
-                                            <th class="head0">Requested Items</th>
-                                            <th class="head1">Unit Amount</th>
-                                            <th class="head0 right">Total Amount</th>
+                                            <th width="50%">Requested Items</th>
+                                            <th>Qty</th>
+                                            <th width="50%">Unit Amount</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
+                                            @foreach($CustomerExtra as $Cust)
                                             <tr>
-                                                    <td> {{ $manages->room_no }}</td>
-                                                    <td> {{ $booking->bookingroomcategory}}</td>
-                                                    <td> </td>
+                                                    <td> {{ $Cust->extra_name }}</td>
+                                                    <td> <center>{{ $Cust->extra_qty }}</center></td>
+                                                    <td class="countable">
+                                                        <center>
+                                                            <?php
+                                                            $Cust->extra_price;
+                                                            $formattedNum = number_format($Cust->total_cost, 2);
+                                                            echo $formattedNum;
+                                                            ?>
+                                                        </center>
+                                                    </td>
+                                            </tr>
+                                            @endforeach
+                                            <tr>
+                                                <td colspan="2"><b>Total Room Balance</b></td>
+                                                <td class="countable">
+
+                                                    <b style="color: red">
+                                                        <center>
+                                                                <?php
+                                                                $formattedNum = number_format($customertotal, 2);
+                                                                echo $formattedNum;
+                                                                ?>
+                                                        </center>
+                                                    </b>
+                                                </td>
                                             </tr>
                                     </tbody>
                             </table>
@@ -171,23 +203,24 @@
                             <div class="row-fluid">
                                     <div class="span8">
                                     Outstanding Balance:  PHP
-                                            <?php
-                                            $booking->bookingTotalCost;
-                                            $formattedNum = number_format($booking->booking_totalbalance, 2);
+
+                                        <b><?php
+                                            $formattedNum = number_format($customertotal, 2);
                                             echo $formattedNum;
                                             ?>
-
+                                        </b>
 
 
                                 </div>
                                 <div class="span4">
-                                    Front Desk Clerk:  <select class="span11" name="fd_name"><?php echo $fd_fd; ?></select>
+                                    Front Desk Clerk:  <span style="text-transform: uppercase">{{ Auth::user()->name }}</span>
                                     <p style="margin-left: 4em">(Name, Signature)</p>
+
                                 </div>
                             </div>
 
-                            <form action="{{ url('/export/'.$manages->id) }}" id="cancelroom" method="post">{{ csrf_field() }}
-                                <input type="submit" id="cancel_it" value="Pay now" class="btn btn-danger pull-right">
+                            <form action="{{ url('/export/'.$manages->id) }}" target="_blank" id="cancelroom" method="post">{{ csrf_field() }}
+                                <input type="submit" value="Pay now" class="pay btn btn-danger pull-right">
                             </form>
                         </div>
                         </div>
@@ -209,9 +242,33 @@
 
 @section('scripts')
 <script>
-        $('#cancel_it').click(function() {
-            alert('hello');
-        });
+
+    $(".pay").click(function(){
+
+        if (confirm('Are you sure you want to Proceed? You wont be able to revert this')) {
+            return true;
+
+        }
+        return false;
+
+    });
+
+
+    var sum = 0;
+    var table = document.getElementById("res");
+    var ths = table.getElementsByTagName('th');
+    var tds = table.getElementsByClassName('countable');
+    for(var i=0;i<tds.length;i++){
+        sum += isNaN(tds[i].innerText) ? 0 : parseInt(tds[i].innerText);
+    }
+
+    var n = parseFloat($('#totalbal').val()) + sum;
+
+    var parts = (+n).toFixed(2).split(".");
+    var num = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (+parts[1] ? "." + parts[1] : "");
+
+    $("#totalb").val(num);
+
 
 </script>
 @endsection

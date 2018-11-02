@@ -16,13 +16,13 @@
 
         @if(Session::has('flash_message_error'))
             <div class="alert alert-error alert-block">
-                <button type="button" class="close" data-dismiss="alert">x</button>
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <strong>{!! session('flash_message_error')!!}</strong>
             </div>
         @endif
         @if(Session::has('flash_message_success'))
             <div class="alert alert-success alert-block">
-                <button type="button" class="close" data-dismiss="alert">x</button>
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <strong>{!! session('flash_message_success')!!}</strong>
             </div>
         @endif
@@ -34,7 +34,8 @@
     <div class="container-fluid">
             <hr>
     <div class="row-fluid">
-
+        <div class="span2">
+        </div>
             <div class="span7" id="1st">
                     {{--  <div class="container-fluid">  --}}
                             <div class="widget-box" >
@@ -47,17 +48,18 @@
 
 
                                         <div class="control-group">
-                                            <label class="control-label">Select Status</label>
+                                            <label class="control-label">Select Transaction</label>
                                                 <div class="controls">
                                                     <select class="span11" value="0"  id="status" name="status">
-                                                        <option value="0">Available</option>
-                                                            <option value="Reserved" >Reserved</a></option>
-                                                            <option value="Occupied">Occupied</option>
+                                                        <option value="0">-----Select here------</option>
+                                                            <option value="Reserved" >Reservation</a></option>
+                                                            <option value="Occupied">Walk-in</option>
+
                                                     </select>
                                                 </div>
                                         </div>
 
-                                        <p id="demo"></p>
+                                        <p id="demo" style="display:none"></p>
 
 
                                         <div class="form-actions">
@@ -135,6 +137,8 @@
                                             <input type="hidden" class="span7" name="ototalbill1" id="ototalbill1">
                                             <input type="hidden" class="span7" name="ototalbalance1" id="ototalbalance1">
                                             <input type="hidden" class="span7" name="roomcat" id="roomcat" value="{{ $manages->room_type}}">
+                                            <input type="hidden"  class="span11" name="room_no" value="{{ $manages->room_no }}">
+                                            <input type="hidden"  class="span11" name="room_rate" value="{{ $manages->room_rate }}">
 
                                         <div class="control-group">
                                             <label class="control-label">Origin</label>
@@ -204,14 +208,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="control-group">
-                                            <label class="control-label">Downpayment</label>
-                                            <div class="controls">
-                                                <input type="text"  class="span11" name="occupydownpayment" id="occupydownpayment">
 
-
-                                            </div>
-                                        </div>
 
                                                 {{--  <label class="control-label">Total Cost ₱</label>  --}}
                                                 {{--  <input type="text" name="oresultcost" id="oresultcost" value="0">  --}}
@@ -286,12 +283,7 @@
                                                 ₱ <span id="ototalbill">0</span>
                                             </td>
                                     </tr>
-                                    <tr>
-                                        <td style="width:140px">Downpayment </td>
-                                            <td>
-                                                ₱ <span id="odownpayment">0</span>
-                                            </td>
-                                    </tr>
+
                                     <tr>
                                         <td style="width:140px">Total Balance </td>
                                             <td>
@@ -326,6 +318,8 @@
                                             <p id="rsvn_no" style="display: none">{{ str_pad($booking->booking_rsvn_no, 10, '0', STR_PAD_LEFT) }}</p>
                                             <input type="hidden"  class="span11" name="result_rsvn_no" id="result_rsvn_no">
 
+                                            <input type="hidden"  class="span11" name="room_no" value="{{ $manages->room_no }}">
+                                            <input type="hidden"  class="span11" name="room_rate" value="{{ $manages->room_rate }}">
 
 
                                             <p id="customer_id" style="display: none">{{ $customer->customer_id }}</p>
@@ -363,7 +357,7 @@
                                     <div class="control-group">
                                         <label class="control-label">Downpayment</label>
                                         <div class="controls">
-                                            <input type="number" class="span11" value="0" name="downpayment" id="downpayment" placeholder="1000.00">
+                                            <input type="number" class="span11" name="downpayment" id="downpayment" placeholder="1000.00">
                                         </div>
                                     </div>
 
@@ -742,8 +736,7 @@
             document.getElementById('total_costt1').value = (totalcost);
             // document.getElementById('total_costt2').value = (totalcost);
             var parts = totalcost.toFixed(2).split(".");
-            var num = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
-                (parts[1] ? "." + parts[1] : "");
+            var num = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + (parts[1] ? "." + parts[1] : "");
             $("#total_costt2").text(num);
 
 
@@ -789,6 +782,7 @@
 
         $("#next").on('click', function(e) {
             e.preventDefault();
+            var id = $('#room_id').val();
 
             var status = $('#status').val();
 
@@ -810,6 +804,7 @@
             $("#occupy_rsvn1").text(incrementvalue);
             // end
 
+
             if (status == "Reserved") {
                 // document.getElementById("demo").innerHTML = "RESERVED";
                 $("#4th").show();
@@ -830,9 +825,15 @@
                 $("#5th").show();
                 $("#1st").hide();
                 $("#3rd").hide();
+            } else if (status == "Existing_Reserved"){
+
+                window.location.href='/status/roomreservedexisting/'+id;
+
             }
+            else if (status == "Existing_Occupy"){
 
-
+                window.location.href='/admin/dashboard';
+            }
 
 
         });

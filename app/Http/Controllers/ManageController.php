@@ -8,6 +8,8 @@ use App\Room_type;
 use App\Category_extra;
 use App\Hotel_extra;
 use App\FrontDesk;
+use App\Customer;
+use App\Booking;
 
 class ManageController extends Controller
 {
@@ -71,7 +73,7 @@ class ManageController extends Controller
             else
             {
                 Manage::where(['id'=>$id])->update(['room_no'=>$data['room_no'],
-                'room_type'=>$data['room_type'], 'room_rate'=>$data['room_rate'] ]);//
+                'room_type'=>$data['room_type'], 'room_rate'=>$data['room_rate'] ]);
 
                 return redirect('/settings/room')->with('flash_message_success','Room Type has been updated successfully!');
             }
@@ -102,10 +104,9 @@ class ManageController extends Controller
             $data = $request->all();
 
             Room_type::where(['id'=>$id])->update(['id'=>$data['id'],
-            'room_type'=>$data['room_type'], 'totalAdults'=>$data['adults_capacity'], 'totalChildren'=>$data['child_capacity'] ]);
+            'room_type'=>$data['room_type'] ]);
 
             return redirect('/settings/room_type')->with('flash_message_success','Room Type has been updated successfully!');
-
         }
 
         $types= Room_type::where(['id'=>$id])->first();
@@ -264,5 +265,80 @@ class ManageController extends Controller
         }
     }
 
+    public function updatefd(Request $request, $id=null)
+    {
+        if($request->isMethod('post')){
+            $data = $request->all();
+            FrontDesk::where(['frontdesk_id'=>$id])->update(['frontdesk_fname'=>$data['fdeskname'] ]);
+            return redirect('/settings/frontdesk')->with('flash_message_success','Category of extra added Successfuly!');
+        }
 
+        $front_desk= FrontDesk::where(['frontdesk_id'=>$id])->first();
+        return view('admin.settings.edit_fdesk')->with(compact('front_desk'));
+    }
+
+    public function deleteRoom($id=null)
+    {
+        Manage::where(['id'=>$id])->delete();
+
+        return redirect()->back()->with('flash_message_success','Room Number has been deleted successfully!');
+    }
+
+    public function deleteRoomType($id=null)
+    {
+        Room_type::where(['id'=>$id])->delete();
+
+        return redirect()->back()->with('flash_message_success','Room Type has been deleted successfully!');
+    }
+
+    public function deleteRoomExtra($id=null)
+    {
+        Hotel_extra::where(['hotex_id'=>$id])->delete();
+
+        return redirect()->back()->with('flash_message_success','Extra has been deleted successfully!');
+    }
+
+    public function deleteRoomExtraCategory($id=null)
+    {
+        Category_extra::where(['excat_id'=>$id])->delete();
+
+        return redirect()->back()->with('flash_message_success','Extra Data has been deleted successfully!');
+    }
+
+    public function deleteFrontDesk($id=null)
+    {
+        FrontDesk::where(['frontdesk_id'=>$id])->delete();
+
+        return redirect()->back()->with('flash_message_success','Front Desk Name has been deleted successfully!');
+    }
+
+    public function reservedExisting(Request $request, $id=null)
+    {
+
+        $manages= Manage::where(['id'=>$id])->first();
+
+        $customer = Customer::where(['customer_name'=>0,'customer_lastname'=>0])
+                            ->where('customer_rsvnno','>','0')->get();
+
+        $customername ="<option value='0'>Customer name</option>";
+        foreach($customer as $val)
+        {
+            $customername .="<option value=".$val->customer_id.">".$val->customer_name.' '.$val->customer_lastname."</option>";
+        }
+
+        return view('admin.status.room_reserved_existing')->with(compact('manages','customername'));
+    }
+
+    public function reservedExisting1(Request $request, $id=null)
+    {
+
+            $data = $request->all();
+            $manages= Manage::where(['id'=>$id])->first();
+            $booking= Booking::orderBy('booking_rsvn_no', 'desc')->first();
+
+            $customer = Customer::where(['customer_id'=>$data['custname']])->first();
+
+           return view('admin.status.room_reserved_existing_2')->with(compact('customer','manages','booking'));
+
+    }
 }

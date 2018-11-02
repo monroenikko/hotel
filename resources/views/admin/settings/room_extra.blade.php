@@ -5,7 +5,7 @@
 
     <div id="content-header">
       <div id="breadcrumb"> <a href="{{url('/admin/dashboard')}}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#"  class="current">Extra's</a> </div>
-      <h1><i class="icon-edit"></i> Extra's</h1>
+      <h1><i class="icon-edit"></i> Extras</h1>
 
       <div class="container-fluid">
 
@@ -61,9 +61,8 @@
                                             </td>
                                             <td class="center">
                                                 <center>
-                                                <a href="{{ url('/settings/edit_extra/'.$hotelex->hotex_id) }}" class="btn btn-primary btn-mini">Edit</a>
-                                                <a href="#" class="btn btn-success btn-mini">Publish</a>
-                                                <a id="delCat" href="{{ url('/admin/delete-category/'.$hotelex->hotex_id) }}" class="btn btn-danger btn-mini">Delete</a></td>
+                                                    <a href="{{ url('/settings/edit_extra/'.$hotelex->hotex_id) }}" class="btn btn-primary btn-mini">Edit</a>
+                                                    <a href="{{ url('/settings/delete-roomextra/'.$hotelex->hotex_id) }}" class="btn btn-danger btn-mini deleteRecord">Delete</a></td>
                                                 </center>
                                             </tr>
                                         @endforeach
@@ -134,5 +133,17 @@
     </div>
 
 </div>
+
+@endsection
+
+@section('scripts')
+<script>
+        $('.deleteRecord').click(function(){
+            if (confirm('Are you sure you want to delete this Category?')) {
+                return true;
+            }
+            return false;
+        });
+</script>
 
 @endsection

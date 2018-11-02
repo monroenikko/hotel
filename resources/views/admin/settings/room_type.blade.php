@@ -62,7 +62,7 @@
                                                 <td class="center">
                                                     <center>
                                                     <a href="{{ url('/settings/edit_roomType/'.$type->id) }}" class="btn btn-primary btn-mini">Edit</a>
-                                                    <a id="delCat" href="{{ url('/settings/type-room/'.$type->id) }}" class="btn btn-danger btn-mini">Delete</a>
+                                                    <a href="{{ url('/settings/delete-roomtype/'.$type->id) }}" class="btn btn-danger btn-mini deleteRecord">Delete</a>
                                                     </center>
                                                 </td>
                                             </tr>
@@ -111,4 +111,15 @@
 
 </div>
 
+@endsection
+
+@section('scripts')
+    <script>
+            $('.deleteRecord').click(function(){
+                if (confirm('Are you sure you want to delete this Category?')) {
+                    return true;
+                }
+                return false;
+            });
+    </script>
 @endsection

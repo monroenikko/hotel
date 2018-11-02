@@ -97,9 +97,6 @@
  </head>
  <body>
  <br />
-
-
-
             <div class="col-md-6">
                 <img width="15%" src="{{ asset('images/unclogo.png') }}" alt="Logo" />
             </div>
@@ -110,8 +107,6 @@
                 <h4 style="text-align: left; margin-top: .5em; color: blue"><i>unc_2014@ymail.com</i></h4>
                 <h4 style="text-align: left; margin-top: .5em"><i>Tel. No.: (047) 917-2895</i></h4>
             </div>
-
-
 <hr/>
 
     <p>RSVN No.: <b>{{ str_pad($manages->rsvn_no, 10, '0', STR_PAD_LEFT) }}</b></p>
@@ -127,12 +122,14 @@
     <p>Contact No.: <b>{{ $customer->customer_contactno }}</b></p>
     <p>Address No.:  <b>{{ $customer->customer_address }}</b></p>
     <p>Bill Arrangement: <b>{{ $booking->booking_billArrangement }}</b></p>
+
+
  <br />
     <div class="table-responsive">
         <table class="table table-striped">
         <thead>
         <tr>
-                <th>No. Rooms</th>
+
                 <th>Type of room</th>
                 <th>No. Pax</th>
                 <th>Room Rate</th>
@@ -140,16 +137,16 @@
                 <th>Total Bill</th>
                 <th>DP</th>
                 <th>Room No.</th>
-                <th>Remark</th>
+                <th>Remarks</th>
         </tr>
         </thead>
         <tbody>
             <tr>
-                <td> {{ $manages->room_no }}</td>
+
                 <td> {{ $booking->bookingroomcategory}}</td>
                 <td> </td>
                 <td> PHP <?php
-                    $manages->room_rate;
+
                     $formattedNum = number_format($manages->room_rate, 2);
                     echo $formattedNum;
                     ?>
@@ -157,14 +154,14 @@
                 <td> {{ $booking->bookingroomcategory}}</td>
                 <td> PHP
                         <?php
-                        $booking->bookingTotalCost;
+
                         $formattedNum = number_format($booking->bookingTotalCost, 2);
                         echo $formattedNum;
                         ?>
                 </td>
                 <td> PHP
                         <?php
-                        $booking->booking_downpayment;
+
                         $formattedNum = number_format($booking->booking_downpayment, 2);
                         echo $formattedNum;
                         ?>
@@ -179,20 +176,46 @@
 
     <br />
     <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped" id="res">
         <thead>
-        <tr>
-                <th>Requested Item(s)</th>
-                <th>Unit Amount</th>
-                <th>Total Amount</th>
-        </tr>
+            <tr>
+                    <th>Requested Item(s)</th>
+                    <th>Qty</th>
+                    <th>Unit Amount</th>
+
+            </tr>
         </thead>
         <tbody>
-            <tr>
-                <td> {{ $manages->room_no }}</td>
-                <td> {{ $booking->bookingroomcategory}}</td>
-                <td> </td>
-            </tr>
+                @foreach($CustomerExtra as $Cust)
+                    <tr>
+                        <td> {{ $Cust->extra_name }}</td>
+                        <td> {{ $Cust->extra_qty }}</td>
+                        <td class="countable">
+                            <center>
+                                <?php
+                                $Cust->extra_price;
+                                $formattedNum = number_format($Cust->total_cost, 2);
+                                echo $formattedNum;
+                                ?>
+                            </center>
+                        </td>
+                    </tr>
+                @endforeach
+                    <tr>
+                        <td colspan="2"><b>Total Room Balance</b></td>
+
+                        <td class="countable">
+
+                            <b style="color: red">
+                            <center>
+                            <?php
+                            $formattedNum = number_format($customertotal, 2);
+                            echo $formattedNum;
+                            ?>
+                            </center>
+                            </b>
+                        </td>
+                    </tr>
         </tbody>
         </table>
     </div>
@@ -202,20 +225,39 @@
     <div class="row">
         <div class="col-md-6">
             Outstanding Balance:  PHP
-                    <?php
-                    $booking->bookingTotalCost;
-                    $formattedNum = number_format($booking->booking_totalbalance, 2);
-                    echo $formattedNum;
-                    ?>
-
-
-
+            <b><?php
+                $formattedNum = number_format($customertotal, 2);
+                echo $formattedNum;
+                ?>
+            </b>
         </div>
         <div class="col-md-6" style="margin-left: 28em">
-            Front Desk Clerk:_____________________
+            Front Desk Clerk: <span style="text-transform: uppercase">{{ Auth::user()->name }}</span>
             <p style="margin-left: 4em">(Name, Signature)</p>
         </div>
     </div>
 
  </body>
 </html>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    var sum = 0;
+    var table = document.getElementById("res");
+    var ths = table.getElementsByTagName('th');
+    var tds = table.getElementsByClassName('countable');
+    for(var i=0;i<tds.length;i++){
+        sum += isNaN(tds[i].innerText) ? 0 : parseInt(tds[i].innerText);
+    }
+
+    var n = parseFloat($('#totalbal').val()) + sum;
+
+    var parts = (+n).toFixed(2).split(".");
+    var num = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (+parts[1] ? "." + parts[1] : "");
+
+    $("#totalb").val(sum);
+
+    });
+</script>
+
+

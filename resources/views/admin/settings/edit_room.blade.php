@@ -50,8 +50,7 @@
                                         <div class="controls">
                                             <select name="room_type" class="span11">
                                                 <option value="0">Room Type</option>
-                                                {{-- to display the main category level --}}
-                                                {{-- if is to compare the parent id and to display the subcategory of it --}}
+
                                                 @foreach($levels as $val)
                                                   <option value="{{ $val->room_type }}"
                                                      @if($val->room_type == $manages->room_type)

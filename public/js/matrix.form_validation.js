@@ -68,6 +68,38 @@ $(document).ready(function() {
         }
     });
 
+    $("#checkin1").validate({
+        rules: {
+            required: {
+                required: true
+            },
+            firstname: {
+                required: true
+
+            },
+            lastname: {
+                required: true,
+            },
+            df: {
+                required: true,
+                date: true
+            },
+            dt: {
+                required: true,
+                date: true
+            }
+        },
+        errorClass: "help-inline",
+        errorElement: "span",
+        highlight: function(element, errorClass, validClass) {
+            $(element).parents('.control-group').addClass('error');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).parents('.control-group').removeClass('error');
+            $(element).parents('.control-group').addClass('success');
+        }
+    });
+
     $("#reserve_room").validate({
         rules: {
             required: {
@@ -240,6 +272,74 @@ $(document).ready(function() {
         }
     });
 
+    $("#cust_extra").validate({
+        rules: {
+            required: {
+                required: true
+            },
+            extraqty: {
+                required: true
+
+            }
+
+        },
+        errorClass: "help-inline",
+        errorElement: "span",
+        highlight: function(element, errorClass, validClass) {
+            $(element).parents('.control-group').addClass('error');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).parents('.control-group').removeClass('error');
+            $(element).parents('.control-group').addClass('success');
+        }
+    });
+
+    $("#fdesk").validate({
+        rules: {
+            required: {
+                required: true
+            },
+            fname: {
+                required: true
+
+            }
+
+        },
+        errorClass: "help-inline",
+        errorElement: "span",
+        highlight: function(element, errorClass, validClass) {
+            $(element).parents('.control-group').addClass('error');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).parents('.control-group').removeClass('error');
+            $(element).parents('.control-group').addClass('success');
+        }
+    });
+
+    $("#edit_fd").validate({
+        rules: {
+            required: {
+                required: true
+            },
+            fdeskname: {
+                required: true
+
+            }
+
+        },
+        errorClass: "help-inline",
+        errorElement: "span",
+        highlight: function(element, errorClass, validClass) {
+            $(element).parents('.control-group').addClass('error');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).parents('.control-group').removeClass('error');
+            $(element).parents('.control-group').addClass('success');
+        }
+    });
+
+
+
     $("#room_Type").validate({
         rules: {
             required: {
@@ -371,6 +471,31 @@ $(document).ready(function() {
 
             },
             hotex_price: {
+                required: true
+
+            }
+        },
+        errorClass: "help-inline",
+        errorElement: "span",
+        highlight: function(element, errorClass, validClass) {
+            $(element).parents('.control-group').addClass('error');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).parents('.control-group').removeClass('error');
+            $(element).parents('.control-group').addClass('success');
+        }
+    });
+
+    $("#dateRange").validate({
+        rules: {
+            required: {
+                required: true
+            },
+            datefrom: {
+                required: true
+
+            },
+            dateto: {
                 required: true
 
             }

@@ -175,6 +175,20 @@ hr {
 
 .bg_ly {
     background: #ffb848;
+    animation-duration: 1500ms;
+    animation-name: blink;
+    animation-iteration-count: infinite;
+}
+
+@keyframes blink {
+    from {
+        opacity: 10;
+        background: #ffb848;
+    }
+    to {
+        opacity: 0;
+        background: #ffb848;
+    }
 }
 
 .bg_dy {
@@ -187,6 +201,20 @@ hr {
 
 .bg_lo {
     background: #da542e;
+    animation-duration: 1500ms;
+    animation-name: blink2;
+    animation-iteration-count: infinite;
+}
+
+@keyframes blink2 {
+    from {
+        opacity: 10;
+        background: #da542e;
+    }
+    to {
+        opacity: 0;
+        background: #da542e;
+    }
 }
 
 .bg_lr {

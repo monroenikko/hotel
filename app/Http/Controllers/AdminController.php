@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Manage;
 use App\Room_type;
 use App\Booking;
+use App\Notifications\checkoutCustomer;
 
 
 class AdminController extends Controller
@@ -48,7 +49,9 @@ class AdminController extends Controller
 
     public function dashboard(){
         date_default_timezone_set('Singapore');
-        $manages = Manage::get();
+        //$manages = Manage::where('room_no')->orderByRaw('ASC')->get();
+
+        $manages = Manage::orderBy('room_no', 'ASC')->get();
         $manages = json_decode(json_encode($manages));
 
         $types = Room_type::where(['room_type'=>0])->get();
@@ -56,29 +59,60 @@ class AdminController extends Controller
         $count1 = Manage::where(['status' => 0])->count();
         $count2 = Manage::where(['status' => 2])->count();
         $count3 = Manage::where(['status' => 1])->count();
+        $count4 = Manage::where(['status' => 3])->count();
+        $count5 = Manage::where(['status' => 4])->count();
+
+        $finalcount = $count3 + $count5;
+        $countOccupy = $count1 + (Manage::where(['status' => 6])->count());
 
         $date = date('Y-m-d');
-        $countout = Booking::where(['checkouDate' => $date, 'booking_status' => 'Occupied'])->count();
+        $countout = Booking::where(['checkouDate' => $date])
+            ->where(['booking_status' => 'Occupied'])
+            ->count();
 
         $countout2 = \App\Booking::where('booking_status','Occupied')->where('checkouDate', '>', $date)->count();
+
 
         //query for check out
         if($countout > 0)
         {
-            $booking = Booking::get();
+            $checkdate = Booking::whereDate('checkouDate',  $date = date("Y-m-d"))
+                ->where('booking_status', 'Occupied')
+                ->get();
 
-            foreach($booking as $book)
+            //$list_console = array();
+            foreach($checkdate as $book)
             {
-                $checkdate = Booking::whereDate('checkouDate', $date = date("Y-m-d"))->first();
-                Manage::where(['id'=>$checkdate->bookingroomID])->update(['status'=>'3', 'color_stats'=>'bg_ly' ]);
+                Manage::where(['id'=>$book->bookingroomID])->update(['status'=>'3', 'color_stats'=>'bg_ly' ]);
+                Booking::where(['booking_rsvn_no'=>$book->booking_rsvn_no])->update(['booking_status'=>'Checkout!']);
+            }
 
+        }
+
+        $count6 = Booking::where(['booking_status' => 'Reserved'])->count();
+
+        $checkReserve = Booking::where(['checkouDate' => $date, 'booking_status' => 'Reserved'])->count();
+
+        if($checkReserve > 0)
+        {
+            $checkReserveExpire = Booking::whereDate('checkouDate',  $date = date("Y-m-d"))
+            ->where('booking_status', 'Reserved')
+            ->get();
+
+            //$list_console = array();
+            foreach($checkReserveExpire as $book)
+            {
+                Manage::where(['id'=>$book->bookingroomID])->update(['status'=>'5', 'color_stats'=>'bg_lo' ]);
+                Booking::where(['booking_rsvn_no'=>$book->booking_rsvn_no])->update(['booking_status'=>'Expired!']);
             }
         }
 
         // $checkdate = Booking::whereDate('checkouDate', $date = date("Y-m-d"))->first();
         // $manage = Manage::where(['id'=>$checkdate->bookingroomID])->update(['status'=>'3', 'color_stats'=>'bg_ly' ]);
         return view('admin.dashboard')
-        ->with(compact('manages','types','count','count1','count2','count3','count5','types_roomtype','countout','countout2','checkdate','manage'));
+        ->with(compact('manages','types','count','count1','count2','count3'
+                        ,'count4','count6','types_roomtype','countout','countout2'
+                        ,'checkdate','manage','checkReserveExpire','checkReserve','finalcount','countOccupy'));
 
     }
 

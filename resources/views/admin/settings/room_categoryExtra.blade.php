@@ -52,8 +52,8 @@
                                             <td class="center">
                                                 <center>
                                                 <a href="{{ url('/settings/edit_extraCategory/'.$category->excat_id) }}" class="btn btn-primary btn-mini">Edit</a>
-                                                {{-- <a href="#" class="btn btn-success btn-mini">Publish</a> --}}
-                                                <a id="delCat" href="{{ url('/admin/delete-category/'.$category->excat_id) }}" class="btn btn-danger btn-mini">Delete</a></td>
+
+                                                <a href="{{ url('/settings/delete-roomextracategory/'.$category->excat_id) }}" class="btn btn-danger btn-mini deleteRecord">Delete</a></td>
                                                 </center>
                                             </tr>
                                         @endforeach
@@ -97,4 +97,15 @@
 
 </div>
 
+@endsection
+
+@section('scripts')
+<script>
+        $('.deleteRecord').click(function(){
+            if (confirm('Are you sure you want to delete this Category?')) {
+                return true;
+            }
+            return false;
+        });
+</script>
 @endsection
